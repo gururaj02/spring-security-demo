@@ -23,7 +23,7 @@ public class SecurityConfig {
     public SecurityFilterChain filterChain(HttpSecurity http) {
         http.csrf(csrf -> csrf.disable())
                 .authorizeHttpRequests(auth ->
-                        auth.requestMatchers("/h2-console","/greet").permitAll().
+                        auth.requestMatchers("/authenticate","/greet").permitAll().
                                 anyRequest().authenticated())
                 .httpBasic(withDefaults());
         return http.build();
