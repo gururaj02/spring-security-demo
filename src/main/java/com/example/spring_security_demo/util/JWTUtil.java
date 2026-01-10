@@ -1,8 +1,10 @@
 package com.example.spring_security_demo.util;
 
+import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.security.Keys;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
 
 import javax.crypto.SecretKey;
@@ -16,7 +18,6 @@ public class JWTUtil {
     private final long EXPIRATION_TIME = 1000 * 60 * 60; // 1hr
 
     public String generateToken(String username) {
-
         return Jwts.builder()
                 .setSubject(username)
                 .setIssuedAt(new Date())
@@ -25,4 +26,25 @@ public class JWTUtil {
                 .compact();
     }
 
+    public String extractUsername(String token) {
+        return extractClaims(token).getSubject();
+    }
+
+    private Claims extractClaims(String token) {
+        return Jwts.parser()
+                .setSigningKey(key)
+                .build()
+                .parseClaimsJws(token)
+                .getBody();
+    }
+
+    public boolean validateToken(String username, UserDetails userDetails, String token) {
+        // TODO - check if username is same as username in userDetails
+        return username.equals(userDetails.getUsername()) && !isTokenExpired(token);
+    }
+
+    // TODO - check if token is not expired
+    private boolean isTokenExpired(String token) {
+        return extractClaims(token).getExpiration().before(new Date());
+    }
 }
