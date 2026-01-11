@@ -1,11 +1,14 @@
 package com.example.spring_security_demo.config;
 
+import com.example.spring_security_demo.entity.Permissions;
+import com.example.spring_security_demo.entity.Role;
 import com.example.spring_security_demo.filters.JwtAuthFilter;
 import com.example.spring_security_demo.service.CustomUserDetailsService;
 import com.example.spring_security_demo.util.JWTUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.ProviderManager;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
@@ -32,8 +35,12 @@ public class SecurityConfig {
     public SecurityFilterChain filterChain(HttpSecurity http, JwtAuthFilter jwtAuthFilter) {
         http.csrf(csrf -> csrf.disable())
                 .authorizeHttpRequests(auth ->
-                        auth.requestMatchers("/authenticate","/greet").permitAll().
-                                anyRequest().authenticated())
+                        auth.requestMatchers("/authenticate","/greet", "/").permitAll()
+//                                .requestMatchers("/health").hasRole(Role.USER.name()) // Role Based
+                                .requestMatchers(HttpMethod.GET, "/greet/**").hasAuthority(Permissions.DEMO_READ.name()) // Permission Based
+                                .requestMatchers(HttpMethod.POST, "/greet/**").hasAuthority(Permissions.DEMO_WRITE.name())
+                                .requestMatchers(HttpMethod.DELETE, "/greet/**").hasAuthority(Permissions.DEMO_DELETE.name())
+                                .anyRequest().authenticated())
                 .addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class);
         return http.build();
     }

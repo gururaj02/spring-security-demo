@@ -1,5 +1,6 @@
 package com.example.spring_security_demo.service;
 
+import com.example.spring_security_demo.entity.Role;
 import com.example.spring_security_demo.entity.Users;
 import com.example.spring_security_demo.repo.UserDetailsRepository;
 import org.springframework.boot.CommandLineRunner;
@@ -17,10 +18,20 @@ public class AdminUserInitializer {
                 Users admin = new Users();
                 admin.setUsername("admin");
                 admin.setPassword(passwordEncoder.encode("admin1234")); // Securely store password
-                admin.setRole("ROLE_ADMIN");
+                admin.setRole(Role.ADMIN);
 
                 userRepository.save(admin);
                 System.out.println("Default admin user created!");
+            }
+
+            if (userRepository.findByUsername("user").isEmpty()) {
+                Users admin = new Users();
+                admin.setUsername("user");
+                admin.setPassword(passwordEncoder.encode("user1234")); // Securely store password
+                admin.setRole(Role.USER);
+
+                userRepository.save(admin);
+                System.out.println("Default user created!");
             }
         };
     }

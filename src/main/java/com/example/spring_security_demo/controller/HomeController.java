@@ -7,6 +7,11 @@ import org.springframework.web.bind.annotation.RestController;
 public class HomeController {
 
     @GetMapping("/")
+    public String homePage() {
+        return "Home Page - Learning Spring Security";
+    }
+
+    @GetMapping("/health")
     public String healthCheck() {
         return "Healthy";
     }
