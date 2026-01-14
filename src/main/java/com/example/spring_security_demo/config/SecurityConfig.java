@@ -36,10 +36,13 @@ public class SecurityConfig {
         http.csrf(csrf -> csrf.disable())
                 .authorizeHttpRequests(auth ->
                         auth.requestMatchers("/authenticate","/greet", "/").permitAll()
+                                .requestMatchers("/api/users/register").permitAll()
+
 //                                .requestMatchers("/health").hasRole(Role.USER.name()) // Role Based
-                                .requestMatchers(HttpMethod.GET, "/greet/**").hasAuthority(Permissions.DEMO_READ.name()) // Permission Based
-                                .requestMatchers(HttpMethod.POST, "/greet/**").hasAuthority(Permissions.DEMO_WRITE.name())
-                                .requestMatchers(HttpMethod.DELETE, "/greet/**").hasAuthority(Permissions.DEMO_DELETE.name())
+
+//                                .requestMatchers(HttpMethod.GET, "/greet/**").hasAuthority(Permissions.DEMO_READ.name()) // Permission Based
+//                                .requestMatchers(HttpMethod.POST, "/greet/**").hasAuthority(Permissions.DEMO_WRITE.name())
+//                                .requestMatchers(HttpMethod.DELETE, "/greet/**").hasAuthority(Permissions.DEMO_DELETE.name())
                                 .anyRequest().authenticated())
                 .addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class);
         return http.build();
