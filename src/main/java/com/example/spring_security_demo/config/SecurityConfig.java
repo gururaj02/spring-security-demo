@@ -25,6 +25,10 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 
 import static org.springframework.security.config.Customizer.withDefaults;
 
+// https://docs.spring.io/spring-security/reference/servlet/architecture.html
+// https://docs.spring.io/spring-security/reference/servlet/authorization/architecture.html
+// https://docs.spring.io/spring-security/reference/servlet/authentication/passwords/basic.html
+
 @Configuration
 @EnableWebSecurity
 @EnableMethodSecurity
